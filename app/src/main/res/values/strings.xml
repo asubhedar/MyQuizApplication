@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">My Quiz Application</string>
+    <string name="definition">Definition</string>
+    <string name="submit">Submit</string>
+    <string name="term">Term</string>
+    <string name="create_a_new_set">Create a new set</string>
+    <string name="next">N\ne\nx\nt</string>
+    <string name="done">Done</string>
+    <string name="enter_the_term">enter the term</string>
+    <string name="enter_the_definition">enter the definition</string>
+    <string name="exit">Exit</string>
+    <string name="score">Score:</string>
+    <string name="char_string_100">1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890</string>
+    <string name="write_term_here">write term here</string>
+    <string name="placeholder_set_name_text">placeholder set name text</string>
+    <string name="test">Test</string>
+    <string name="delete_set">Delete Set</string>
+    <string name="practice">Practice</string>
+    <string name="edit_set">Edit Set</string>
+    <string name="correct_answer">CORRECT ANSWER!</string>
+    <string name="wrong_answer">WRONG ANSWER!</string>
+    <string name="correct_answer_is">\"Correct answer is: \"</string>
 </resources>

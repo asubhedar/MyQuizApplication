@@ -26,6 +26,10 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".EditSetActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".PracticeActivity"
             android:exported="true">
         </activity>

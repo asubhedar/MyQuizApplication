@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="definition">Definition</string>
+    <string name="submit">Submit</string>
+    <string name="term">Term</string>
+    <string name="create_a_new_set">Create a new set</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="char_string_100">1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890</string>
+    <string name="write_term_here">write term here</string>
+    <string name="delete_set">Delete Set</string>
+    <string name="edit_set">Edit Set</string>
+</resources>

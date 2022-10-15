@@ -8,12 +8,8 @@ import android.content.ContentValues;
 
 import android.database.SQLException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.RowSetWriter;
-
 
 public class QuizDB {
     public static final String DATABASE_NAME = "QuizDB";
@@ -29,7 +25,7 @@ public class QuizDB {
         ourContext = context;
     }
 
-    private class DBHelper extends SQLiteOpenHelper {
+    private static class DBHelper extends SQLiteOpenHelper {
         public static final String KEY_ROW_ID = "_id";
         public static final String KEY_SET_ID = "setId";
         public static final String KEY_TERM = "term";
@@ -65,10 +61,9 @@ public class QuizDB {
         }
     }
 
-    public QuizDB open() throws SQLException {
+    public void open() throws SQLException {
         ourHelper = new DBHelper(ourContext);
         ourDatabase = ourHelper.getWritableDatabase();
-        return this;
     }
 
     public void close() {
@@ -76,14 +71,14 @@ public class QuizDB {
     }
 
     public long createEntry(String tableName, Object object) {
-        if (tableName == "CardsTable") {
+        if (tableName.equals("CardsTable")) {
             Card card = (Card) object;
             ContentValues cv = new ContentValues();
             cv.put("setId", card.getSetId());
             cv.put("term", card.getTerm());
             cv.put("definition", card.getDefinition());
             return ourDatabase.insert(tableName, null, cv);
-        } else if (tableName == "SetsTable") {
+        } else if (tableName.equals("SetsTable")) {
             String setTitle = (String) object;
             ContentValues cv = new ContentValues();
             cv.put("setTitle", setTitle);
@@ -91,8 +86,25 @@ public class QuizDB {
         } else return 0;
     }
 
-    public List getSetList() {
-        List setList = new ArrayList<Set>();
+    public long updateEntry(String tableName, Object object) {
+        if (tableName.equals("CardsTable")) {
+            Card card = (Card) object;
+            ContentValues cv = new ContentValues();
+            cv.put("_id", card.getId());
+            cv.put("setId", card.getSetId());
+            cv.put("term", card.getTerm());
+            cv.put("definition", card.getDefinition());
+            return ourDatabase.replace(tableName, null, cv);
+        } else if (tableName.equals("SetsTable")) {
+            String setTitle = (String) object;
+            ContentValues cv = new ContentValues();
+            cv.put("setTitle", setTitle);
+            return ourDatabase.insert(tableName, null, cv);
+        } else return 0;
+    }
+
+    public List<Set> getSetList() {
+        List<Set> setList = new ArrayList<>();
         String selectSQL = "SELECT * FROM " + SETS_TABLE;
         Cursor c = ourDatabase.rawQuery(selectSQL, null);
         if (c.moveToFirst()) {
@@ -103,11 +115,12 @@ public class QuizDB {
                 setList.add(set);
             } while (c.moveToNext());
         }
+        c.close();
         return setList;
     }
 
-    public List getSetById(int setId) {
-        List cardSet = new ArrayList<Card>();
+    public List<Card> getSetById(int setId) {
+        List<Card> cardSet = new ArrayList<>();
         String selectSQL = "SELECT * FROM " + CARDS_TABLE + " WHERE setId = " + setId;
         Cursor c = ourDatabase.rawQuery(selectSQL, null);
         if (c.moveToFirst()) {
@@ -120,13 +133,13 @@ public class QuizDB {
                 cardSet.add(card);
             } while (c.moveToNext());
         }
+        c.close();
         return cardSet;
     }
 
     public void deleteSet(Integer setId) {
-        int cardsDeleted = ourDatabase.delete(CARDS_TABLE, "setID = " + setId, null);
-        int rowsDeleted = ourDatabase.delete(SETS_TABLE, "_id = " + setId, null);
-        return;
+        ourDatabase.delete(CARDS_TABLE, "setID = " + setId, null);
+        ourDatabase.delete(SETS_TABLE, "_id = " + setId, null);
     }
 }
 

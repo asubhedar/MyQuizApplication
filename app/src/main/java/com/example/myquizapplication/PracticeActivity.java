@@ -24,6 +24,7 @@ public class PracticeActivity extends AppCompatActivity {
     final int[] currentCardNumber = {0};
 
     Button btnDeleteSet;
+    Button btnEditSet;
     Button btnExit;
     Button btnTest;
     Button btnNext;
@@ -40,27 +41,30 @@ public class PracticeActivity extends AppCompatActivity {
     TextView tvScore;
     TextView tvSetTitle2;
     TextView tvTerm;
+    List<Card> cardList;
+    int setId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.practice_activity);
+        setContentView(R.layout.set_options);
 
         btnDeleteSet = findViewById(R.id.btnDeleteSet);
+        btnEditSet = findViewById(R.id.btnEditSet);
         btnPractice = findViewById(R.id.btnPractice);
         btnTest = findViewById(R.id.btnTest);
 
         tvSetTitle2 = findViewById(R.id.tvSetTitle2);
 
         Intent myIntent = getIntent();
-        Integer setId = myIntent.getIntExtra("setId", 0);
+        setId = myIntent.getIntExtra("setId", 0);
         String setTitle = myIntent.getStringExtra("setTitle");
 
         tvSetTitle2.setText(setTitle);
 
         QuizDB quizDB = new QuizDB(getApplicationContext());
         quizDB.open();
-        List<Card> cardList = quizDB.getSetById(setId);
+        cardList = quizDB.getSetById(setId);
         quizDB.close();
 
         btnPractice.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +77,16 @@ public class PracticeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 manageTest(cardList, currentCardNumber);
+            }
+        });
+        btnEditSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditSetActivity.class);
+                intent.putExtra("setId", setId);
+                intent.putExtra("setTitle", setTitle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
         btnDeleteSet.setOnClickListener(new View.OnClickListener() {
@@ -89,18 +103,21 @@ public class PracticeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        QuizDB quizDB = new QuizDB(getApplicationContext());
+        quizDB.open();
+        cardList = quizDB.getSetById(setId);
+        quizDB.close();
         currentCardNumber[0] = 0;
     }
 
     private void managePractice(List<Card> cardList, int[] currentCardNumber) {
-        int numCards = cardList.size();
-        final boolean[] isAllcorrect = {true};
-        /*final int[] score = {0};*/
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = vi.inflate(R.layout.enter_term_view, null);
+        if (cardList.size() == 0)
+            return;
+        final boolean[] isAllCorrect = {true};
+        View view = View.inflate(this, R.layout.enter_term_view, null);
 
         // insert into main view
-        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.practiceLayout);
+        ViewGroup insertPoint = findViewById(R.id.practiceLayout);
         insertPoint.addView(view, 1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         btnNext = findViewById(R.id.btnNext);
         btnPracticeDone = findViewById(R.id.btnPracticeDone);
@@ -136,8 +153,8 @@ public class PracticeActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isAllcorrect[0] && !cardList.get(currentCardNumber[0]).isCorrectAnswerFlag())
-                    isAllcorrect[0] = false;
+                if (isAllCorrect[0] && !cardList.get(currentCardNumber[0]).isCorrectAnswerFlag())
+                    isAllCorrect[0] = false;
                 etEnterTerm.setEnabled(true);
                 btnSubmit.setEnabled(true);
                 currentCardNumber[0]++;
@@ -147,7 +164,7 @@ public class PracticeActivity extends AppCompatActivity {
                     tvResult.setVisibility(View.GONE);
                     tvGivenDefinition.setText(cardList.get(currentCardNumber[0]).getDefinition());
                 } else {
-                    if (isAllcorrect[0] == true) {
+                    if (isAllCorrect[0]) {
                         btnExit.setVisibility(View.GONE);
                         btnNext.setVisibility(View.GONE);
                         btnSubmit.setVisibility(View.GONE);
@@ -159,9 +176,6 @@ public class PracticeActivity extends AppCompatActivity {
                         tvGivenDefinition.setVisibility(View.GONE);
                         tvResult.setVisibility(View.GONE);
                         tvTerm.setVisibility(View.GONE);
-
-                        /*tvScore.setText("Score: " + score[0] + "/" + numCards);
-                        tvScore.setVisibility(View.VISIBLE);*/
 
                         btnPracticeDone.setVisibility(View.VISIBLE);
                         btnPracticeDone.setOnClickListener(new View.OnClickListener() {
@@ -178,16 +192,14 @@ public class PracticeActivity extends AppCompatActivity {
                             }
                         }
                         cardList.clear();
-                        for (Card card : tempList) {
-                            cardList.add(card);
-                        }
+                        cardList.addAll(tempList);
                         currentCardNumber[0] = 0;
                         managePractice(cardList, currentCardNumber);
                     }
                 }
             }
         });
-         btnSubmit.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 etEnterTerm.setEnabled(false);
@@ -197,12 +209,12 @@ public class PracticeActivity extends AppCompatActivity {
                 if (answerTerm.equals(correctTerm)) {
                     cardList.get(currentCardNumber[0]).setCorrectAnswerFlag(true);
                     tvCorrectTerm.setVisibility(View.GONE);
-                    tvResult.setText("CORRECT ANSWER!");
+                    tvResult.setText(R.string.correct_answer);
                     /*score[0]++;*/
                 } else {
-                    isAllcorrect[0] = false;
-                    tvResult.setText("WRONG ANSWER!");
-                    tvCorrectTerm.setText("Correct answer is: " + correctTerm);
+                    isAllCorrect[0] = false;
+                    tvResult.setText(R.string.wrong_answer);
+                    tvCorrectTerm.setText(getString(R.string.correct_answer_is) + correctTerm);
                     tvCorrectTerm.setVisibility(View.VISIBLE);
                 }
                 tvResult.setVisibility(View.VISIBLE);
@@ -219,18 +231,18 @@ public class PracticeActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
     }
 
     private void manageTest(List<Card> cardList, int[] currentCardNumber) {
         int numCards = cardList.size();
+        if (numCards == 0)
+            return;
         final int[] score = {0};
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = vi.inflate(R.layout.enter_term_view, null);
+        //LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = View.inflate(this, R.layout.enter_term_view, null);
 
         // insert into main view
-        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.practiceLayout);
+        ViewGroup insertPoint = findViewById(R.id.practiceLayout);
         insertPoint.addView(view, 1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         btnExit = findViewById(R.id.btnExit);
         btnNext = findViewById(R.id.btnNext);
@@ -283,7 +295,7 @@ public class PracticeActivity extends AppCompatActivity {
                     tvResult.setVisibility(View.GONE);
                     tvTerm.setVisibility(View.GONE);
 
-                    tvScore.setText("Score: " + score[0] + "/" + numCards);
+                    tvScore.setText(R.string.score + score[0] + "/" + numCards);
                     tvScore.setVisibility(View.VISIBLE);
 
                     btnPracticeDone.setVisibility(View.VISIBLE);
@@ -305,12 +317,12 @@ public class PracticeActivity extends AppCompatActivity {
                 String correctTerm = cardList.get(currentCardNumber[0]).getTerm();
                 if (answerTerm.equals(correctTerm)) {
                     tvCorrectTerm.setVisibility(View.GONE);
-                    tvResult.setText("CORRECT ANSWER!");
+                    tvResult.setText(R.string.correct_answer);
                     cardList.get(currentCardNumber[0]).setCorrectAnswerFlag(true);
                     score[0]++;
                 } else {
-                    tvResult.setText("WRONG ANSWER!");
-                    tvCorrectTerm.setText("Correct answer is: " + correctTerm);
+                    tvResult.setText(R.string.wrong_answer);
+                    tvCorrectTerm.setText(R.string.correct_answer_is + correctTerm);
                     tvCorrectTerm.setVisibility(View.VISIBLE);
                 }
                 tvResult.setVisibility(View.VISIBLE);

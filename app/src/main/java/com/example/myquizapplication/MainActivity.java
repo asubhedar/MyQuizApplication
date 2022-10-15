@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -75,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         {
             Button btn = new Button(this);
             btn.setText(set.getTitle());
+            btn.setBackgroundColor(getColor(R.color.secondaryLightColor));
+            btn.setTextColor(getColor(R.color.secondaryTextColor));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,0,20);
+            params.gravity= Gravity.CENTER_HORIZONTAL;
+            btn.setPadding(20,0,20,0);
+            btn.setLayoutParams(params);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
