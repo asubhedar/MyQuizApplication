@@ -46,7 +46,7 @@
         android:ems="10"
         android:hint="@string/enter_the_term"
         android:importantForAutofill="no"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:minHeight="48dp"
         android:textColorHint="#00838F"
         app:layout_constraintStart_toEndOf="@+id/tvTerm"
