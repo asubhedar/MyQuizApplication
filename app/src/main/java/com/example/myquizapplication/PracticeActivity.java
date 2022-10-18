@@ -1,10 +1,10 @@
 package com.example.myquizapplication;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -92,10 +92,24 @@ public class PracticeActivity extends AppCompatActivity {
         btnDeleteSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                quizDB.open();
-                quizDB.deleteSet(setId);
-                quizDB.close();
-                finish();
+                AlertDialog.Builder alert = new AlertDialog.Builder(PracticeActivity.this);
+                //final EditText edittext = new EditText(PracticeActivity.this);
+                alert.setTitle("Are you sure you want to delete this set?");
+                //alert.setView(edittext);
+                alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        quizDB.open();
+                        quizDB.deleteSet(setId);
+                        quizDB.close();
+                        finish();
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // do nothing
+                    }
+                });
+                alert.show();
             }
         });
     }

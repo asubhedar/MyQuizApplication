@@ -5,11 +5,12 @@
       <map>
         <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/drawable/ic_launcher_background.xml" value="0.199" />
         <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/create_set_activity.xml" value="0.18" />
-        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/edit_set_activity.xml" value="0.18" />
+        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/create_set_activity.xml" value="0.33" />
+        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/edit_set_activity.xml" value="0.33" />
         <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/enter_term_view.xml" value="0.1" />
         <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/practice_activity.xml" value="0.2" />
-        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/set_options.xml" value="0.2025089605734767" />
+        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/set_options.xml" value="0.22" />
+        <entry key="..\:/Users/ashwi/AndroidStudioProjects/MyQuizApplication/app/src/main/res/layout/set_options_2.xml" value="0.2" />
       </map>
     </option>
   </component>
