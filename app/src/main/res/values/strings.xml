@@ -19,5 +19,5 @@
     <string name="edit_set">Edit Set</string>
     <string name="correct_answer">CORRECT ANSWER!</string>
     <string name="wrong_answer">WRONG ANSWER!</string>
-    <string name="correct_answer_is">\"Correct answer is: \"</string>
+    <string name="correct_answer_is">Correct answer is: </string>
 </resources>

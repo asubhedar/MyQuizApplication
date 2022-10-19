@@ -6,19 +6,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.myquizapplication.model.QuizDB;
 import com.example.myquizapplication.model.Set;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), PracticeActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SetOptionsActivity.class);
                     intent.putExtra("setId", set.getId());
                     intent.putExtra("setTitle", set.getTitle());
                     startActivity(intent);

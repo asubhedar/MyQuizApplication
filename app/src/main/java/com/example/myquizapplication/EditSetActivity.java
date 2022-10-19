@@ -46,6 +46,7 @@ public class EditSetActivity extends AppCompatActivity {
             return;
         }
         quizDB.close();
+
         tvSetTitle.setText(setTitle);
         Card card = cardList.get(0);
         etTerm.setText(card.getTerm());
